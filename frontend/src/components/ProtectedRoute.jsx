@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
 
+    // useEffect is a hook that is being called when ProtectedRoute is being rendered. It initializes the auth function
     useEffect(() => {
         auth().catch(() => setIsAuthorized(false))
     }, [])
@@ -15,7 +16,7 @@ function ProtectedRoute({ children }) {
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         try {
-            const res = await api.post("/api/token/refresh/", {
+            const res = await api.post("/main/token/refresh/", {
                 refresh: refreshToken
             });
             if (res.status == 200) {
@@ -38,7 +39,7 @@ function ProtectedRoute({ children }) {
             setIsAuthorized(false);
             return;
         }
-        
+
         // decoding the token and accesing the value of exp date
         const decoded = jwtDecode(token);
         const tokenExpiration = decoded.exp;
@@ -55,7 +56,7 @@ function ProtectedRoute({ children }) {
         return <div>Loading...</div>;
     }
 
-    return isAuthorized ? children : <Navigate to="/login"/>;
+    return isAuthorized ? children : <Navigate to="/welcome"/>;
 }
 
 export default ProtectedRoute;

@@ -1,0 +1,46 @@
+@import "./colors.css";
+@import url('https://fonts.cdnfonts.com/css/the-aesthetic-essential');
+
+
+.center{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 87vh;
+}
+
+#Welcome-logo {
+    width: 100%;
+    height: auto;
+}
+
+#button-begin {
+  background: var(--purple2);
+  border-radius: 999px;
+  box-shadow: var(--purple3) 0 10px 20px -10px;
+  text-shadow: var(--purple3) 0 1px 2px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: 'The Aesthetic Essential', sans-serif;
+  font-size: 28px;
+  line-height: 32px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 48px 2px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+  position: relative;
+  top: 10px;
+}
+
+#button-begin:hover {
+  background: var(--purple0_9);
+  box-shadow: var(--purple2) 0 10px 20px -10px;
+  text-shadow: var(--purple2) 0 1px 2px;
+}
