@@ -2,6 +2,7 @@
 
 export const color = {
     dark_background: "#030304",
+    grey: "2e2e2e",
     purple1: "#35057b",
     purple2: "#52057b",
     purple3: "#892cdc",

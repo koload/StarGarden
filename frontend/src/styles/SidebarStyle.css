@@ -1,0 +1,40 @@
+@import "./colors.css";
+
+/* SidebarStyle.css */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--grey);
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 10px;
+    margin-bottom: 100px;
+}
+
+.sidebar ul li {
+    padding: 8px;
+}
+
+.svg-button:hover {
+    cursor: pointer;
+}
+
+/* HomeStyle.css */
+.home-container {
+    display: flex;
+}
+
+.home-content {
+    margin-left: 200px; /* Same width as the sidebar */
+    padding: 20px;
+}
