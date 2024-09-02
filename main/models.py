@@ -57,7 +57,6 @@ class SpaceObjectGenerates(models.Model):
 class SpaceObjectPrice(models.Model):
     spaceObject = models.ForeignKey(SpaceObject, on_delete=models.CASCADE, related_name="space_object_prices_space_objects")
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name="space_object_prices_resources")
-    description = models.TextField()    
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     
 

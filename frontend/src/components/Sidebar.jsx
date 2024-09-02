@@ -6,11 +6,6 @@ import Store from './Store';
 import Friends from './Friends';
 import Inventory from './Inventory';
 import Forge from './Forge';
-import OpenStoreButton from "../images/Buttons/StoreButton.svg";
-import OpenFriendsWindowButton from "../images/Buttons/FriendsButton.svg";
-import LogoutButton from "../images/Buttons/LogoutButton.svg";
-import OpenInventoryButton from "../images/Buttons/InventoryButton.svg";
-import OpenForgeButton from "../images/Buttons/ForgeButton.svg";
 
 function Sidebar() {
     const [isStoreWindowOpen, setIsStoreWindowOpen] = useState(false);
@@ -50,11 +45,11 @@ function Sidebar() {
     return (
         <div className="sidebar">
             <ul className="button-list">
-                <li><img className="svg-button" src={OpenInventoryButton} onClick={openInventoryWindow} alt="Open Inventory" /></li>
-                <li><img className="svg-button" src={OpenForgeButton} onClick={openForgeWindow} alt="Open Forge" /></li>
-                <li><img className="svg-button" src={OpenStoreButton} onClick={openStore} alt="Open Store" /></li>
-                <li><img className="svg-button" src={OpenFriendsWindowButton} onClick={openFriendsWindow} alt="Open Friends" /></li>
-                <li><img className="svg-button" src={LogoutButton} onClick={() => navigate("/logout")} alt="Logout" /></li>
+                <li><img className="svg-button" src="/images/Buttons/InventoryButton.svg" onClick={openInventoryWindow} alt="Open Inventory" /></li>
+                <li><img className="svg-button" src="/images/Buttons/ForgeButton.svg" onClick={openForgeWindow} alt="Open Forge" /></li>
+                <li><img className="svg-button" src="/images/Buttons/StoreButton.svg" onClick={openStore} alt="Open Store" /></li>
+                <li><img className="svg-button" src="/images/Buttons/FriendsButton.svg" onClick={openFriendsWindow} alt="Open Friends" /></li>
+                <li><img className="svg-button" src="/images/Buttons/LogoutButton.svg" onClick={() => navigate("/logout")} alt="Logout" /></li>
             </ul>
             {isStoreWindowOpen && (
                 <Modal onClose={() => setIsStoreWindowOpen(false)}>
