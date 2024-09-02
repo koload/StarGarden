@@ -12,4 +12,4 @@ function Modal({ children, onClose }) {
     );
 }
 
-export default Modal;
+export default React.memo(Modal);
