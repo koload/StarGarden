@@ -1,3 +1,4 @@
+from django.shortcuts import get_list_or_404
 from django.shortcuts import render
 from django.http.response import HttpResponse
 from django.contrib.auth.models import User
@@ -7,17 +8,18 @@ from .serializers import (
     SpaceObjectPriceSerializer, 
     SpaceObjectSerializer,
     UserSpaceObjectSerializer, 
-    UserGridSerializer)
+    UserGridSerializer,
+    UserResourcesSerializer
+    )
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import SpaceObjectPrice, SpaceObject, UserSpaceObject, UserGrid
+from .models import SpaceObjectPrice, SpaceObject, UserSpaceObject, UserGrid, UserResources, Resource
 
 
 def add_space_object_to_inventory(user_id, space_object_id):
     try:
-
         # check if the user_space_object already exists
         user_space_object = UserSpaceObject.objects.filter(user_id=user_id, spaceObject_id=space_object_id).first()
         if user_space_object:
@@ -71,6 +73,27 @@ def add_space_object_to_inventory(user_id, space_object_id):
 #         user = self.request.user
 #         return Note.objects.filter(author=user)    
 
+@api_view(['GET'])
+def get_resources_by_id(request):
+    # Log the full query parameters
+    print(f"Full query params: {request.query_params}")
+    
+    resource_ids = request.query_params.getlist('resource_ids')
+    print(f"Resource ids after getlist: {resource_ids}")  # Debugging print
+    
+    if not resource_ids:
+        return Response({"detail": "resource_ids are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    resources = get_list_or_404(Resource, id__in=resource_ids)
+    resource_names = {resource.id: resource.name for resource in resources}
+    return Response(resource_names, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def user_resources(request):
+    user_id = request.user.id
+    user_resources = UserResources.objects.filter(user_id=user_id)
+    serializer = UserResourcesSerializer(user_resources, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def current_user(request):

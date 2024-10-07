@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import "../styles/SidebarStyle.css";
 import Modal from './Modal';
@@ -6,12 +6,38 @@ import Store from './Store';
 import Friends from './Friends';
 import Inventory from './Inventory';
 import Forge from './Forge';
+import api from "../api";
 
-function Sidebar( {onSelectItem}) {
+const fetchUserResources = async () => {
+    try {
+        const response = await api.get("user_resources/" , {});
+        console.log("User Resources Data:", response.data); // for debugging
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user resources:", error);
+        throw error;
+    }
+};
+
+const fetchResourceNames = async (resourceIds) => {
+    try {
+        const response = await api.get("get_resources_by_id/", {
+            params: { resource_ids: resourceIds },
+        });
+        console.log("Resource Names Data:", response.data); // for debugging
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching resource names:", error);
+        throw error;
+    }
+};
+
+function Sidebar({ onSelectItem }) {
     const [isStoreWindowOpen, setIsStoreWindowOpen] = useState(false);
     const [isInventoryWindowOpen, setIsInventoryWindowOpen] = useState(false);
     const [isFriendsWindowOpen, setIsFriendsWindowOpen] = useState(false);
     const [isForgeWindowOpen, setIsForgeWindowOpen] = useState(false);
+    const [resources, setResources] = useState([]);
 
     const navigate = useNavigate();
 
@@ -42,14 +68,29 @@ function Sidebar( {onSelectItem}) {
         setIsForgeWindowOpen(true);
     }, [closeAllWindows]);
 
+    useEffect(() => {
+        const getResources = async () => {
+            try {
+                const resources = await fetchUserResources();
+                setResources(resources); // Set the state with fetched data
+
+                const resourceIds = resources.map(resource => resource.resource_id);
+                const resourceNames = await fetchResourceNames(resourceIds);
+                console.log("Resources:", resourceIds); // for debugging
+                
+            } catch (error) {
+                console.error("Failed to fetch resources:", error);
+            }
+        };
+        getResources();
+    }, []);
+
     return (
         <div className="sidebar">
             <div className="sidebar-resources">
-                <p>
-                Elementary Matter: <br/>
-                Water<br/>
-                Earth<br/>
-                </p>
+                <ul>
+
+                </ul>
             </div>
             <div className="button-container">
                 <ul className="button-list">
@@ -72,7 +113,7 @@ function Sidebar( {onSelectItem}) {
             )}
             {isInventoryWindowOpen && (
                 <Modal onClose={() => setIsInventoryWindowOpen(false)}>
-                    <Inventory onClose={() => setIsInventoryWindowOpen(false)} onSelectItem={onSelectItem}/>
+                    <Inventory onClose={() => setIsInventoryWindowOpen(false)} onSelectItem={onSelectItem} />
                 </Modal>
             )}
             {isForgeWindowOpen && (

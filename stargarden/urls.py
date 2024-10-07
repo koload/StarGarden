@@ -27,7 +27,9 @@ from main.views import (
     remove_space_object_from_inventory,
     remove_space_object_from_grid,
     get_space_object_from_grid,
-    buy_space_object
+    buy_space_object,
+    user_resources,
+    get_resources_by_id
 )
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -49,7 +51,9 @@ urlpatterns = [
     path('remove_space_object_from_grid/', remove_space_object_from_grid, name="remove_space_object_from_grid"),
     path('get_space_object_from_grid/', get_space_object_from_grid, name="get_space_object"),
     path('buy_space_object/', buy_space_object, name="buy_space_object"),
+    path('user_resources/', user_resources, name="user_resources"),
     path('main/', include("main.urls")),
+    path('get_resources_by_id/', get_resources_by_id, name="get_resources_by_id"),
     path('', index)
 ]
 

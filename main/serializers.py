@@ -46,6 +46,14 @@ class UserGridSerializer(serializers.ModelSerializer):
         model = UserGrid
         fields = ["id", "user_id", "spaceObject_id", "x", "y"]
 
+class UserResourcesSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user')
+    resource_id = serializers.PrimaryKeyRelatedField(queryset=Resource.objects.all(), source='resource')
+
+    class Meta:
+        model = UserResources
+        fields = ["id", "user_id", "resource_id", "quantity"]
+
 
 
 

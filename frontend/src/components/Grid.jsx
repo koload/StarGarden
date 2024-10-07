@@ -32,9 +32,6 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
                             col: j,
                             spaceObject: spaceObject,
                         });
-                        if (spaceObject) {
-                            console.log(`Space object found at ${i}-${j}:`, spaceObject);
-                        }
                     } catch (error) {
                         console.error("Error fetching space object:", error);
                         cells.push({
