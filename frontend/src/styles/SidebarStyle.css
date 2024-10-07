@@ -1,6 +1,3 @@
-@import "./colors.css";
-
-/* SidebarStyle.css */
 .sidebar {
     width: 200px;
     height: 100vh;
@@ -8,33 +5,40 @@
     top: 0;
     left: 0;
     background-color: var(--grey);
-    padding-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align content starting from the top */
 }
 
-.sidebar ul {
+.sidebar-resources {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px; /* Space between resources and buttons */
+}
+
+.button-container {
+    flex-grow: 1; /* This will take up the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the buttons within the container */
+    align-items: center;
+    width: 100%;
+}
+
+.button-list {
     list-style-type: none;
-    padding: 10px;
-    margin-bottom: 100px;
-}
-
-.sidebar ul li {
-    padding: 8px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .svg-button:hover {
-    cursor: pointer;
-}
+    cursor: pointer;}
 
-/* HomeStyle.css */
-.home-container {
-    display: flex;
-}
-
-.home-content {
-    margin-left: 200px; /* Same width as the sidebar */
-    padding: 20px;
+.sidebar ul li {
+    padding: 8px;
 }

@@ -11,6 +11,7 @@
     justify-content: center;
     align-items: center;
     font-size: 24px;
+    z-index: 1000;
 }
 
 .modal-content {
@@ -20,6 +21,7 @@
     padding: 20px;
     border-radius: 8px;
     position: relative;
+    z-index: 1001;
 }
 
 .modal-close {

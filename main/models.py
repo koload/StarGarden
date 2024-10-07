@@ -96,6 +96,11 @@ class ResourceTransformation(models.Model):
 
     def __str__(self):
         return self.inputResource.name + " - " + str(self.inputQuantity) + " - " + self.outputResource.name + " - " + str(self.outputQuantity)
+    
 
+class UserSpaceObject(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_space_objects")
+    spaceObject = models.ForeignKey(SpaceObject, on_delete=models.CASCADE, related_name="user_space_objects")
+    quantity = models.DecimalField(max_digits=10, decimal_places=2)
     
 

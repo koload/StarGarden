@@ -6,7 +6,6 @@ import Home from './pages/Home'
 import Welcome from './pages/Welcome'
 import NotFound from "./pages/NotFound"
 import ProtectedRoute from './components/ProtectedRoute'
-import Store from './components/Store'
 
 
 // as soon as user logs out the refresh and access tokens are removed and the user is directed to

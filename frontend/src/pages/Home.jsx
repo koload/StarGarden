@@ -6,17 +6,16 @@ import Grid from "../components/Grid";
 import api from "../api";
 import { useState, useEffect } from "react";
 
-import Forge from "../components/Forge";
-
 function Home() {
     const [userData, setUserData] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
 
-    const fetchCurrentUser = async (userId) => {
+    const fetchCurrentUser = async () => {
         try {
             const response = await api.get("current_user/")
             return response.data
         } catch (error) {
-            console.error("Error fetching the cucrent user:", error)
+            console.error("Error fetching the current user:", error)
             throw error
         }
     };
@@ -34,19 +33,15 @@ function Home() {
         fetchUserData();
     }, []);
 
-
-
-    return(
+    return (
         <>
             <BackgroundColorChange color_to_set={color.dark_background} />
             <div>
-                <Sidebar />
-            </div>
-            <div>
-                <p>TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST {userData ? userData.username : "Loading..."}</p>
+                <Sidebar onSelectItem={setSelectedItem} />
+                <Grid rows={9} columns={16} selectedItem={selectedItem} onSelectItem={setSelectedItem}/>
             </div>
         </>
     );
 }
 
-export default Home
+export default Home;

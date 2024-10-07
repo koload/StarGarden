@@ -7,7 +7,7 @@ import Friends from './Friends';
 import Inventory from './Inventory';
 import Forge from './Forge';
 
-function Sidebar() {
+function Sidebar( {onSelectItem}) {
     const [isStoreWindowOpen, setIsStoreWindowOpen] = useState(false);
     const [isInventoryWindowOpen, setIsInventoryWindowOpen] = useState(false);
     const [isFriendsWindowOpen, setIsFriendsWindowOpen] = useState(false);
@@ -44,13 +44,22 @@ function Sidebar() {
 
     return (
         <div className="sidebar">
-            <ul className="button-list">
-                <li><img className="svg-button" src="/images/Buttons/InventoryButton.svg" onClick={openInventoryWindow} alt="Open Inventory" /></li>
-                <li><img className="svg-button" src="/images/Buttons/ForgeButton.svg" onClick={openForgeWindow} alt="Open Forge" /></li>
-                <li><img className="svg-button" src="/images/Buttons/StoreButton.svg" onClick={openStore} alt="Open Store" /></li>
-                <li><img className="svg-button" src="/images/Buttons/FriendsButton.svg" onClick={openFriendsWindow} alt="Open Friends" /></li>
-                <li><img className="svg-button" src="/images/Buttons/LogoutButton.svg" onClick={() => navigate("/logout")} alt="Logout" /></li>
-            </ul>
+            <div className="sidebar-resources">
+                <p>
+                Elementary Matter: <br/>
+                Water<br/>
+                Earth<br/>
+                </p>
+            </div>
+            <div className="button-container">
+                <ul className="button-list">
+                    <li><img className="svg-button" src="/images/Buttons/InventoryButton.svg" onClick={openInventoryWindow} alt="Open Inventory" /></li>
+                    <li><img className="svg-button" src="/images/Buttons/ForgeButton.svg" onClick={openForgeWindow} alt="Open Forge" /></li>
+                    <li><img className="svg-button" src="/images/Buttons/StoreButton.svg" onClick={openStore} alt="Open Store" /></li>
+                    <li><img className="svg-button" src="/images/Buttons/FriendsButton.svg" onClick={openFriendsWindow} alt="Open Friends" /></li>
+                    <li><img className="svg-button" src="/images/Buttons/LogoutButton.svg" onClick={() => navigate("/logout")} alt="Logout" /></li>
+                </ul>
+            </div>
             {isStoreWindowOpen && (
                 <Modal onClose={() => setIsStoreWindowOpen(false)}>
                     <Store />
@@ -63,7 +72,7 @@ function Sidebar() {
             )}
             {isInventoryWindowOpen && (
                 <Modal onClose={() => setIsInventoryWindowOpen(false)}>
-                    <Inventory />
+                    <Inventory onClose={() => setIsInventoryWindowOpen(false)} onSelectItem={onSelectItem}/>
                 </Modal>
             )}
             {isForgeWindowOpen && (

@@ -3,3 +3,19 @@
 body {
     color: var(--purple4);
 }
+
+/* HomeStyle.css */
+.home-container {
+    display: flex;
+    height: 100vh; /* Ensure it takes up the full height of the viewport */
+}
+
+.home-content {
+    flex-grow: 1; /* This will take the remaining width after the sidebar */
+    padding: 20px;
+    overflow: auto; /* Allows content to scroll if it overflows */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}

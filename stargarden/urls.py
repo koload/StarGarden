@@ -16,11 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from main.views import CreateUserView, index, current_user
+from main.views import (
+    CreateUserView,
+    index,
+    current_user,
+    space_object_prices,
+    space_objects,
+    space_object_by_user_id,
+    place_space_object_on_grid,
+    remove_space_object_from_inventory,
+    remove_space_object_from_grid,
+    get_space_object_from_grid,
+    buy_space_object
+)
+
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf import settings
 from django.conf.urls.static import static
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +41,14 @@ urlpatterns = [
     path("main/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("main-auth/", include("rest_framework.urls")),
     path("current_user/", current_user, name="current_user"),
+    path('space_object_prices/', space_object_prices, name="space_object_prices"),
+    path('space_objects/', space_objects, name="space_object"),
+    path('user_space_objects/', space_object_by_user_id, name="user_space_objects"),
+    path('place_space_object/', place_space_object_on_grid, name="place_space_object"),
+    path('remove_space_object_from_inventory/', remove_space_object_from_inventory, name="remove_space_object_from_inventory"),
+    path('remove_space_object_from_grid/', remove_space_object_from_grid, name="remove_space_object_from_grid"),
+    path('get_space_object_from_grid/', get_space_object_from_grid, name="get_space_object"),
+    path('buy_space_object/', buy_space_object, name="buy_space_object"),
     path('main/', include("main.urls")),
     path('', index)
 ]
