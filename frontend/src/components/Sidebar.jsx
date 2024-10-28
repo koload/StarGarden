@@ -8,10 +8,36 @@ import Inventory from './Inventory';
 import Forge from './Forge';
 import api from "../api";
 
+const claimResources = async (userGridSpaceObjects) => {
+    try {
+        console.log("claiming resources:", userGridSpaceObjects)
+        const responce = await api.post("claim_resources/", {
+            userGridSpaceObjects: userGridSpaceObjects
+        });
+        console.log("Claimed resources:", responce.data); // for debugging
+        return responce.data;
+    } catch (error) {
+        console.error("Error claiming resources:", error);
+        throw error;
+    }
+};
+
+const fetchUserSpaceObjectsFromGrid = async (setUserGridSpaceObjects) => {
+    try {
+        const response = await api.get("get_user_space_objects_from_grid/")
+        setUserGridSpaceObjects(response.data);
+        console.log("Fetched space objects from users grid:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching space objects from users grid")
+        throw error;
+    }
+}
+
 const fetchUserResources = async () => {
     try {
-        const response = await api.get("user_resources/" , {});
-        console.log("User Resources Data:", response.data); // for debugging
+        const response = await api.get("user_resources/");
+        console.log("User Resources Data:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching user resources:", error);
@@ -21,10 +47,9 @@ const fetchUserResources = async () => {
 
 const fetchResourceNames = async (resourceIds) => {
     try {
-        const response = await api.get("get_resources_by_id/", {
-            params: { resource_ids: resourceIds },
+        const response = await api.post("get_resources_by_id/", {
+            resource_ids: resourceIds,
         });
-        console.log("Resource Names Data:", response.data); // for debugging
         return response.data;
     } catch (error) {
         console.error("Error fetching resource names:", error);
@@ -38,6 +63,8 @@ function Sidebar({ onSelectItem }) {
     const [isFriendsWindowOpen, setIsFriendsWindowOpen] = useState(false);
     const [isForgeWindowOpen, setIsForgeWindowOpen] = useState(false);
     const [resources, setResources] = useState([]);
+    const [resourceNames, setResourceNames] = useState([]);
+    const [userGridSpaceObjects, setUserGridSpaceObjects] = useState([]);
 
     const navigate = useNavigate();
 
@@ -72,10 +99,11 @@ function Sidebar({ onSelectItem }) {
         const getResources = async () => {
             try {
                 const resources = await fetchUserResources();
-                setResources(resources); // Set the state with fetched data
-
+                setResources(resources);
+                
                 const resourceIds = resources.map(resource => resource.resource_id);
                 const resourceNames = await fetchResourceNames(resourceIds);
+                setResourceNames(resourceNames);
                 console.log("Resources:", resourceIds); // for debugging
                 
             } catch (error) {
@@ -85,16 +113,36 @@ function Sidebar({ onSelectItem }) {
         getResources();
     }, []);
 
+    const getResourceNameById = (resourceId) => {
+        return resourceNames[resourceId] || "Unknown";    
+    };
+
+    useEffect( () => {
+        if (userGridSpaceObjects.length > 0) {
+            const callClaimResources = async () => {
+                await claimResources(userGridSpaceObjects)
+                const updatedResources = await fetchUserResources();
+                setResources(updatedResources);
+            }
+            callClaimResources();
+        }
+    }, [userGridSpaceObjects]);
+
     return (
         <div className="sidebar">
             <div className="sidebar-resources">
                 <ul>
-
+                    {resources.map((resource, index) => (
+                        <li>
+                            <p>{getResourceNameById(resource.resource_id)}: {resource.quantity}</p>
+                        </li>
+                        ))}
                 </ul>
             </div>
             <div className="button-container">
                 <ul className="button-list">
                     <li><img className="svg-button" src="/images/Buttons/InventoryButton.svg" onClick={openInventoryWindow} alt="Open Inventory" /></li>
+                    <li><img className="svg-button" src="/images/Buttons/ClaimButton.svg" onClick={async () => {await fetchUserSpaceObjectsFromGrid(setUserGridSpaceObjects)}} alt="Claim" /></li>
                     <li><img className="svg-button" src="/images/Buttons/ForgeButton.svg" onClick={openForgeWindow} alt="Open Forge" /></li>
                     <li><img className="svg-button" src="/images/Buttons/StoreButton.svg" onClick={openStore} alt="Open Store" /></li>
                     <li><img className="svg-button" src="/images/Buttons/FriendsButton.svg" onClick={openFriendsWindow} alt="Open Friends" /></li>
@@ -103,7 +151,7 @@ function Sidebar({ onSelectItem }) {
             </div>
             {isStoreWindowOpen && (
                 <Modal onClose={() => setIsStoreWindowOpen(false)}>
-                    <Store />
+                    <Store setResources={setResources} />
                 </Modal>
             )}
             {isFriendsWindowOpen && (
@@ -118,7 +166,7 @@ function Sidebar({ onSelectItem }) {
             )}
             {isForgeWindowOpen && (
                 <Modal onClose={() => setIsForgeWindowOpen(false)}>
-                    <Forge />
+                    <Forge resources={resources} resourceNames={resourceNames} setResources={setResources}/>
                 </Modal>
             )}
         </div>

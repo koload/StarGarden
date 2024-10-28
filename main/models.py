@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # #Test model
 # class Note(models.Model):
@@ -33,7 +34,7 @@ class UserResources(models.Model):
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.user.username + " - " + self.resource.name
+        return self.user.username + " - " + self.resource.name + " - " + str(self.quantity)
     
 
 class SpaceObject(models.Model):
@@ -65,6 +66,7 @@ class UserGrid(models.Model):
     spaceObject = models.ForeignKey(SpaceObject, on_delete=models.CASCADE, related_name="user_grids_space_objects")
     x = models.IntegerField()
     y = models.IntegerField()
+    last_collected = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username + " - " + self.spaceObject.name + " - " + str(self.x) + " - " + str(self.y)

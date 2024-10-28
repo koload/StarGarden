@@ -29,7 +29,13 @@ from main.views import (
     get_space_object_from_grid,
     buy_space_object,
     user_resources,
-    get_resources_by_id
+    get_resources_by_id,
+    test_task,
+    get_user_space_objects_from_grid,
+    claim_resources,
+    get_output_transformation_resources,
+    handle_resource_transformation,
+    get_resource_transformation
 )
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -52,8 +58,14 @@ urlpatterns = [
     path('get_space_object_from_grid/', get_space_object_from_grid, name="get_space_object"),
     path('buy_space_object/', buy_space_object, name="buy_space_object"),
     path('user_resources/', user_resources, name="user_resources"),
-    path('main/', include("main.urls")),
+    path('test_task/', test_task, name="test_task"),
+    path('get_user_space_objects_from_grid/', get_user_space_objects_from_grid, name="get_user_space_objects_from_grid"),
     path('get_resources_by_id/', get_resources_by_id, name="get_resources_by_id"),
+    path('claim_resources/', claim_resources, name="claim_resources"),
+    path('get_output_transformation_resources/', get_output_transformation_resources, name="get_output_transformation_resources"),
+    path('handle_resource_transformation/', handle_resource_transformation, name="handle_resource_transformation"),
+    path('get_resource_transformation/', get_resource_transformation, name="get_resource_transformation"),
+    path('main/', include("main.urls")),
     path('', index)
 ]
 

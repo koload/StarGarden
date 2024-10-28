@@ -1,0 +1,94 @@
+@import "./colors.css";
+
+.forge-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 35%;
+    gap: 10px;
+}
+
+.forge-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.forge-list li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.arrow-right {
+    transform: rotate(180deg);
+}
+
+.arrow-left, .arrow-right{
+    cursor: pointer;
+}
+
+.column, .column-second, .text-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.text-column {
+    margin-top: 50px;
+}
+
+.column, .column-second {
+    margin-top: 6px;
+}
+
+.column img, .column-second img {
+    margin-top:58px;
+}
+
+.column-second {
+    margin-top: 0px;
+}
+
+.text-column p {
+    margin: 0;
+    padding: 10px;
+}
+
+.top-text {
+    margin-bottom: 2px;
+    display: inline-block;
+}
+
+.bottom-text {
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.input-in, .input-out {
+    background-color: var(--gray); 
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #505050;
+    text-align: center;
+    color: var(--blueish_purple);
+    font-size: 15px;
+}
+
+.transform-button {
+    cursor: pointer;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}

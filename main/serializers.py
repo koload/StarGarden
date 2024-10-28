@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import UserProfile, SpaceObject, UserGrid, Resource, SpaceObjectPrice, UserResources, UserSpaceObject
+from .models import UserProfile, SpaceObject, UserGrid, Resource, SpaceObjectPrice, UserResources, UserSpaceObject, ResourceTransformation
 from rest_framework import serializers
 
 
@@ -44,7 +44,7 @@ class UserGridSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserGrid
-        fields = ["id", "user_id", "spaceObject_id", "x", "y"]
+        fields = ["id", "user_id", "spaceObject_id", "x", "y", "last_collected"]
 
 class UserResourcesSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user')
@@ -54,7 +54,13 @@ class UserResourcesSerializer(serializers.ModelSerializer):
         model = UserResources
         fields = ["id", "user_id", "resource_id", "quantity"]
 
+class ResourceTransformationSerializer(serializers.ModelSerializer):
+    inputResource_id = serializers.PrimaryKeyRelatedField(queryset=Resource.objects.all(), source='inputResource')
+    outputResource_id = serializers.PrimaryKeyRelatedField(queryset=Resource.objects.all(), source='outputResource')
 
+    class Meta:
+        model = ResourceTransformation
+        fields = ["id", "inputResource_id", "outputResource_id", "inputQuantity", "outputQuantity"]
 
 
 

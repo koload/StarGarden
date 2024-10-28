@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import "../styles/StoreStyle.css";
 
-function Store() {
+function Store({setResources}) {
     const [storeData, setStoreData] = useState(null);
     const [spaceObjectData, setSpaceObjectData] = useState(null);
 
@@ -77,6 +77,11 @@ function Store() {
                 spaceObject_id: spaceObject_id,
                 resources: resources
             });
+
+            const updated_resources = await api.get("user_resources/");
+            setResources(updated_resources.data)
+            console.log("User resources updated:", updated_resources.data);
+
             console.log("Space object bought:", response.data);
         } catch (error) {
             console.error("Error buying space object:", error);
