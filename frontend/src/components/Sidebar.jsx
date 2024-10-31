@@ -113,6 +113,17 @@ function Sidebar({ onSelectItem }) {
         getResources();
     }, []);
 
+    useEffect(() => {
+        const updateResourceNames = async () => {
+            const resourceIds = resources.map(resource => resource.resource_id);
+            const resourceNames = await fetchResourceNames(resourceIds);
+            setResourceNames(resourceNames);
+        };
+        if (resources.length > 0) {
+            updateResourceNames();
+        }
+    }, [resources]);
+
     const getResourceNameById = (resourceId) => {
         return resourceNames[resourceId] || "Unknown";    
     };
@@ -166,7 +177,7 @@ function Sidebar({ onSelectItem }) {
             )}
             {isForgeWindowOpen && (
                 <Modal onClose={() => setIsForgeWindowOpen(false)}>
-                    <Forge resources={resources} resourceNames={resourceNames} setResources={setResources}/>
+                    <Forge resources={resources} setResources={setResources}/>
                 </Modal>
             )}
         </div>

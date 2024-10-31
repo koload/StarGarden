@@ -20,7 +20,13 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from datetime import datetime, timezone
 from decimal import Decimal
 import math
-from .models import SpaceObjectPrice, SpaceObject, UserSpaceObject, UserGrid, UserResources, Resource, SpaceObjectGenerates, ResourceTransformation
+from .models import SpaceObjectPrice, SpaceObject, UserSpaceObject, UserGrid, UserResources, Resource, SpaceObjectGenerates, ResourceTransformation, Upgrade, UpgradeCost
+
+@api_view(['GET'])
+def get_space_object__upgrades(request):
+    user_id = request.user.id
+    
+
 
 @api_view(['GET'])
 def get_resource_transformation(request):

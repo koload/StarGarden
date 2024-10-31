@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import UserProfile, SpaceObject, UserGrid, Resource, SpaceObjectPrice, UserResources, UserSpaceObject, ResourceTransformation
+from .models import UserProfile, SpaceObject, UserGrid, Resource, SpaceObjectPrice, UserResources, UserSpaceObject, ResourceTransformation, Upgrade, UpgradeCost
 from rest_framework import serializers
 
 
@@ -63,6 +63,21 @@ class ResourceTransformationSerializer(serializers.ModelSerializer):
         fields = ["id", "inputResource_id", "outputResource_id", "inputQuantity", "outputQuantity"]
 
 
+class UpgradeSerializer(serializers.ModelSerializer):
+    baseSpaceObject_id = serializers.PrimaryKeyRelatedField(queryset=SpaceObject.objects.all(), source='baseSpaceObject')
+    upgradedSpaceObject_id = serializers.PrimaryKeyRelatedField(queryset=SpaceObject.objects.all(), source='upgradedSpaceObject')
+
+    class Meta:
+        model = Upgrade
+        fields = ["id", "baseSpaceObject_id", "upgradedSpaceObject_id", "upgradeDescription"]
+
+class UpgradeCostSerializer(serializers.ModelSerializer):
+    upgrade_id = serializers.PrimaryKeyRelatedField(queryset=Upgrade.objects.all(), source='upgrade')
+    resource_id = serializers.PrimaryKeyRelatedField(queryset=Resource.objects.all(), source='resource')
+
+    class Meta:
+        model = UpgradeCost
+        fields = ["id", "upgrade_id", "resource_id", "quantity"]
 
 # class NoteSerializer(serializers.ModelSerializer):
 #     class Meta:

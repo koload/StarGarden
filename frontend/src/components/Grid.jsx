@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/GridStyle.css";
 import api from "../api";
+import Modal from './Modal';
+import SpaceObjectMenu from './SpaceObjectMenu';
 
 function Grid({ rows, columns, selectedItem, onSelectItem }) {
     const [gridCells, setGridCells] = useState([]);
     const [userData, setUserData] = useState(null);
+    const [isSpaceObjectMenuOpen, setIsSpaceObjectMenuOpen] = useState(false);
+    const [spaceObjectMenuData, setSpaceObjectMenuData] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -127,9 +131,24 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
         }
     };
 
+    useEffect(() => {
+        if (spaceObjectMenuData) {
+            console.log(spaceObjectMenuData)
+            setIsSpaceObjectMenuOpen(true);
+        }
+    }, [spaceObjectMenuData]);
+
     const handleCellClick = async (row, col) => {
         console.log(`Cell clicked: Row ${row}, Column ${col}`);
-        if (selectedItem && userData) {
+        // open spaceObject menu
+        if (selectedItem === null) {
+            let spaceObject = await get_space_object_from_grid(row, col);
+            if (spaceObject.id) { 
+                console.log(spaceObject)
+                setSpaceObjectMenuData(spaceObject);
+            }
+        }
+        else if (selectedItem && userData) {
             console.log(`Selected Item: ${selectedItem.spaceObject.id}`);
             await place_space_object(userData.id, selectedItem.spaceObject.id, row, col);
             remove_space_object_from_inventory(userData.id, selectedItem.spaceObject.id);
@@ -142,12 +161,14 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
             )
             onSelectItem(null);
         }
+
     };
 
-    const handleCellDoubleClick = async (row, col) => {
+    const handleCellLeftClick = async (event, row, col) => {
+        event.preventDefault();
         console.log(`Cell double clicked: Row ${row}, Column ${col}`);
         if (!selectedItem && userData) {
-            const spaceObject = await get_space_object_from_grid(row, col);
+            let spaceObject = await get_space_object_from_grid(row, col);
             if (spaceObject) {
                 console.log(`Space object ID: ${spaceObject.id}`);
                 await remove_space_object_from_grid(row, col, spaceObject.id);
@@ -178,7 +199,7 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
                         key={cell.key}
                         className="grid-cell"
                         onClick={() => handleCellClick(cell.row, cell.col)}
-                        onDoubleClick={() => handleCellDoubleClick(cell.row, cell.col)}
+                        onContextMenu={(event) => handleCellLeftClick(event, cell.row, cell.col)}
                     >
                         {cell.spaceObject && (
                             <img
@@ -190,6 +211,11 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
                     </div>
                 ))}
             </div>
+            {isSpaceObjectMenuOpen && (
+                <Modal onClose={() => setIsSpaceObjectMenuOpen(false)}> 
+                    <SpaceObjectMenu spaceObjectMenuData={spaceObjectMenuData}/>
+                </Modal>
+            )}
         </div>
     );
 }
