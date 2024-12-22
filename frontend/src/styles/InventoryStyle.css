@@ -1,12 +1,49 @@
 @import "./colors.css";
 
-.svg:hover {
-    cursor: pointer;
-}   
-
 li {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+}
+ul {
+    display: flex;
+    flex-wrap: wrap
+}
+.inventory-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.inventory-list {
+    background-color: #141414;
+    border: 1px solid;
+    border-color: var(--purple0_9);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--purple1);
+    margin: 10px;
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.inventory-list:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.inventory-list img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.inventory-list p {
+    margin: 10px 0;
 }

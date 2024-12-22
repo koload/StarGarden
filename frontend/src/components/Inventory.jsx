@@ -110,15 +110,19 @@ function Inventory( { onClose, onSelectItem } ) {
     };
 
     return (
-        <div>
+        <div className="inventory-container">
             {userSpaceObjects && spaceObjects ? (
                 <ul>
                     {groupedData.map((group, index) => (
-                        <li key={index} className="inventory-list">
-                            <img className="svg" onClick={() => selectInventoryItem(group)} src={group.spaceObject.image_path} alt={group.spaceObject.name}/>
-                            <p>{group.spaceObject.name}</p>
-                            <p>{group.spaceObject.description}</p>
+                        <li key={index} onClick={() => selectInventoryItem(group)} className="inventory-list">
+                            <div className="inventory-list-item-top">
+                                <img className="svg" src={group.spaceObject.image_path} alt={group.spaceObject.name}/>
+                                <p className='space-object-name'>{group.spaceObject.name}</p>
+                                <p>{group.spaceObject.description}</p>
+                            </div>
+                            <div className="inventory-list-item-bottom">
                             <p>Quantity: {group.quantity}</p>
+                            </div>
                         </li>
                     ))}
                 </ul>

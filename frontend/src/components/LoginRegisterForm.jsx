@@ -12,6 +12,7 @@ function Form({ route, method }) {
     const navigate = useNavigate()
 
     const name = method === "login" ? "Login" : "Register"
+    const secondname = method === "login" ? "Create account" : "Login"
 
     const handleSubmit = async (e) => {
         setLoading(true);
@@ -33,6 +34,14 @@ function Form({ route, method }) {
         }
     };
 
+    const switchForm = () => {
+        if (method === "login") {
+            navigate("/register")
+        } else {
+            navigate("/login")
+        }
+    }
+
     return <form onSubmit={handleSubmit} className="form-container">
         <h1>{name}</h1>
         <input
@@ -49,9 +58,14 @@ function Form({ route, method }) {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
         />
-        <button className="form-button" type="submit">
-            {name}
-        </button>
+        <div className="form-buttons">
+            <button className="form-button" type="submit">
+                {name}
+            </button>
+            <button className="form-button" type="button" onClick={switchForm}>
+                {secondname}
+            </button>
+        </div>
     </form>
 }
 

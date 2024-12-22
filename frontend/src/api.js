@@ -28,6 +28,7 @@ const refreshAccessToken = async () => {
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem(ACCESS_TOKEN);
+        console.log(localStorage.getItem(ACCESS_TOKEN));
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -38,24 +39,26 @@ api.interceptors.request.use(
     }
 );
 
-// Adding a response interceptor to handle token expiration
-api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (error) => {
-        const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-            const newAccessToken = await refreshAccessToken();
-            if (newAccessToken) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
-                originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                return api(originalRequest);
-            }
-        }
-        return Promise.reject(error);
-    }
-);
+
 
 export default api;
+
+// Adding a response interceptor to handle token expiration
+// api.interceptors.response.use(
+//     (response) => {
+//         return response;
+//     },
+//     async (error) => {
+//         const originalRequest = error.config;
+//         if (error.response.status === 401 && !originalRequest._retry) {
+//             originalRequest._retry = true;
+//             const newAccessToken = await refreshAccessToken();
+//             if (newAccessToken) {
+//                 axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+//                 originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+//                 return api(originalRequest);
+//             }
+//         }
+//         return Promise.reject(error);
+//     }
+// );

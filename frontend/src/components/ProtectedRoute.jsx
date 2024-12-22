@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
-
     // useEffect is a hook that is being called when ProtectedRoute is being rendered. It initializes the auth function
     useEffect(() => {
         auth().catch(() => setIsAuthorized(false))
