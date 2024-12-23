@@ -11,17 +11,29 @@
     justify-content: flex-start; /* Align content starting from the top */
 }
 
+
 .sidebar-resources {
-    text-align: center;
     width: 100%;
-    margin-bottom: 20px; /* Space between resources and buttons */
 }
 
-.button-container {
-    flex-grow: 1; /* This will take up the remaining space */
+.sidebar-resources ul {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers the buttons within the container */
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-resources ul li p {
+    margin: 0;
+}
+
+
+.button-container {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 100%;
 }

@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # #Test model
 # class Note(models.Model):
@@ -12,10 +15,21 @@ from django.contrib.auth.models import User
 #     def __str__(self):
 #         return self.title
 
+PREDEFINED_RESOURCES = [
+    {"resource_name": "Prime Matter", "quantity": 400.00},
+    {"resource_name": "Water", "quantity": 500.00},
+]
+
+@receiver(post_save, sender=User)
+def create_user_resources(sender, instance, created, **kwargs):
+    if created:
+        for resource_data in PREDEFINED_RESOURCES:
+            resource, _ = Resource.objects.get_or_create(name=resource_data["resource_name"])
+            UserResources.objects.create(user=instance, resource=resource, quantity=resource_data["quantity"])
 
 class Resource(models.Model):
     name = models.CharField(max_length=100)
-
+    
     def __str__(self):
         return self.name
 
@@ -33,8 +47,7 @@ class UserResources(models.Model):
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.user.username + " - " + self.resource.name
-    
+        return self.user.username + " - " + self.resource.name + " - " + str(self.quantity)
 
 class SpaceObject(models.Model):
     name = models.CharField(max_length=100)
@@ -58,13 +71,16 @@ class SpaceObjectPrice(models.Model):
     spaceObject = models.ForeignKey(SpaceObject, on_delete=models.CASCADE, related_name="space_object_prices_space_objects")
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name="space_object_prices_resources")
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    
+
+    def __str__(self):
+        return self.spaceObject.name + " - " + self.resource.name + " - " + str(self.quantity)
 
 class UserGrid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_grids_users")
     spaceObject = models.ForeignKey(SpaceObject, on_delete=models.CASCADE, related_name="user_grids_space_objects")
     x = models.IntegerField()
     y = models.IntegerField()
+    last_collected = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username + " - " + self.spaceObject.name + " - " + str(self.x) + " - " + str(self.y)
@@ -102,5 +118,8 @@ class UserSpaceObject(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_space_objects")
     spaceObject = models.ForeignKey(SpaceObject, on_delete=models.CASCADE, related_name="user_space_objects")
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.user.username + " - " + self.spaceObject.name + " - " + str(self.quantity)
     
 

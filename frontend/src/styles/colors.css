@@ -1,9 +1,11 @@
 :root {
     --dark-background: #030304;
+    --dark-background-light: #050505;
     --grey: #1d1d1d;
     --purple0_9: #460568;
     --purple1: #35057b;
     --purple2: #52057b;
     --purple3: #892cdc;
     --purple4: #bc6ff1;
+    --blueish_purple: #8b6ff1;
   }

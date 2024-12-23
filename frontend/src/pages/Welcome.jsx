@@ -7,7 +7,7 @@ function Welcome() {
     const navigate = useNavigate();
     return (
         <div>
-            <BackgroundColorChange color_to_set={color.dark_background} />
+            <BackgroundColorChange color_to_set={color.dark_background_light} />
             <div>
                 <div className="center">
                     <img id="StarGarden-logo" src="/images/Texts/StarGardenLogoType12-purple_overgrown-export.svg" alt="StarGarden Logo"></img>

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/GridStyle.css";
 import api from "../api";
+import Modal from './Modal';
+import SpaceObjectMenu from './SpaceObjectMenu';
 
-function Grid({ rows, columns, selectedItem, onSelectItem }) {
+function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResources, fetchUserResources }) {
     const [gridCells, setGridCells] = useState([]);
     const [userData, setUserData] = useState(null);
+    const [isSpaceObjectMenuOpen, setIsSpaceObjectMenuOpen] = useState(false);
+    const [spaceObjectMenuData, setSpaceObjectMenuData] = useState(null);
+    const [x, setX] = useState(null);
+    const [y, setY] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -32,9 +38,6 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
                             col: j,
                             spaceObject: spaceObject,
                         });
-                        if (spaceObject) {
-                            console.log(`Space object found at ${i}-${j}:`, spaceObject);
-                        }
                     } catch (error) {
                         console.error("Error fetching space object:", error);
                         cells.push({
@@ -50,7 +53,7 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
         };
 
         fetchGridSpaceObjects();
-    }, []);
+    }, [rows, columns]);
 
     const fetchCurrentUser = async () => {
         try {
@@ -130,9 +133,22 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
         }
     };
 
+    useEffect(() => {
+        if (spaceObjectMenuData) {
+            setIsSpaceObjectMenuOpen(true);
+        }
+    }, [spaceObjectMenuData]);
+
     const handleCellClick = async (row, col) => {
-        console.log(`Cell clicked: Row ${row}, Column ${col}`);
-        if (selectedItem && userData) {
+        if (selectedItem === null) {
+            let spaceObject = await get_space_object_from_grid(row, col);
+            if (spaceObject.id) { 
+                setX(row);
+                setY(col);
+                setSpaceObjectMenuData(spaceObject);
+            }
+        }
+        else if (selectedItem && userData) {
             console.log(`Selected Item: ${selectedItem.spaceObject.id}`);
             await place_space_object(userData.id, selectedItem.spaceObject.id, row, col);
             remove_space_object_from_inventory(userData.id, selectedItem.spaceObject.id);
@@ -147,10 +163,11 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
         }
     };
 
-    const handleCellDoubleClick = async (row, col) => {
+    const handleCellRightClick = async (event, row, col) => {
+        event.preventDefault();
         console.log(`Cell double clicked: Row ${row}, Column ${col}`);
         if (!selectedItem && userData) {
-            const spaceObject = await get_space_object_from_grid(row, col);
+            let spaceObject = await get_space_object_from_grid(row, col);
             if (spaceObject) {
                 console.log(`Space object ID: ${spaceObject.id}`);
                 await remove_space_object_from_grid(row, col, spaceObject.id);
@@ -181,7 +198,7 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
                         key={cell.key}
                         className="grid-cell"
                         onClick={() => handleCellClick(cell.row, cell.col)}
-                        onDoubleClick={() => handleCellDoubleClick(cell.row, cell.col)}
+                        onContextMenu={(event) => handleCellRightClick(event, cell.row, cell.col)}
                     >
                         {cell.spaceObject && (
                             <img
@@ -193,6 +210,21 @@ function Grid({ rows, columns, selectedItem, onSelectItem }) {
                     </div>
                 ))}
             </div>
+            {isSpaceObjectMenuOpen && (
+                <Modal onClose={() => setIsSpaceObjectMenuOpen(false)}> 
+                    <SpaceObjectMenu
+                        setSpaceObjectMenuData={setSpaceObjectMenuData} 
+                        spaceObjectMenuData={spaceObjectMenuData} 
+                        x={x} 
+                        y={y} 
+                        setGridCells={setGridCells} 
+                        gridCells={gridCells} 
+                        get_space_object_from_grid={get_space_object_from_grid}
+                        setResources={setResources}
+                        fetchUserResources={fetchUserResources}
+                    />
+                </Modal>
+            )}
         </div>
     );
 }
