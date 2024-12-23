@@ -4,13 +4,11 @@ import api from "../api";
 import Modal from './Modal';
 import SpaceObjectMenu from './SpaceObjectMenu';
 
-function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResources, fetchUserResources }) {
+function Grid({ rows, columns, selectedItem, onSelectItem }) {
     const [gridCells, setGridCells] = useState([]);
     const [userData, setUserData] = useState(null);
     const [isSpaceObjectMenuOpen, setIsSpaceObjectMenuOpen] = useState(false);
     const [spaceObjectMenuData, setSpaceObjectMenuData] = useState(null);
-    const [x, setX] = useState(null);
-    const [y, setY] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -53,7 +51,7 @@ function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResourc
         };
 
         fetchGridSpaceObjects();
-    }, [rows, columns]);
+    }, []);
 
     const fetchCurrentUser = async () => {
         try {
@@ -135,16 +133,18 @@ function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResourc
 
     useEffect(() => {
         if (spaceObjectMenuData) {
+            console.log(spaceObjectMenuData)
             setIsSpaceObjectMenuOpen(true);
         }
     }, [spaceObjectMenuData]);
 
     const handleCellClick = async (row, col) => {
+        console.log(`Cell clicked: Row ${row}, Column ${col}`);
+        // open spaceObject menu
         if (selectedItem === null) {
             let spaceObject = await get_space_object_from_grid(row, col);
             if (spaceObject.id) { 
-                setX(row);
-                setY(col);
+                console.log(spaceObject)
                 setSpaceObjectMenuData(spaceObject);
             }
         }
@@ -161,9 +161,10 @@ function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResourc
             )
             onSelectItem(null);
         }
+
     };
 
-    const handleCellRightClick = async (event, row, col) => {
+    const handleCellLeftClick = async (event, row, col) => {
         event.preventDefault();
         console.log(`Cell double clicked: Row ${row}, Column ${col}`);
         if (!selectedItem && userData) {
@@ -198,7 +199,7 @@ function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResourc
                         key={cell.key}
                         className="grid-cell"
                         onClick={() => handleCellClick(cell.row, cell.col)}
-                        onContextMenu={(event) => handleCellRightClick(event, cell.row, cell.col)}
+                        onContextMenu={(event) => handleCellLeftClick(event, cell.row, cell.col)}
                     >
                         {cell.spaceObject && (
                             <img
@@ -212,17 +213,7 @@ function Grid({ rows, columns, selectedItem, onSelectItem, resources, setResourc
             </div>
             {isSpaceObjectMenuOpen && (
                 <Modal onClose={() => setIsSpaceObjectMenuOpen(false)}> 
-                    <SpaceObjectMenu
-                        setSpaceObjectMenuData={setSpaceObjectMenuData} 
-                        spaceObjectMenuData={spaceObjectMenuData} 
-                        x={x} 
-                        y={y} 
-                        setGridCells={setGridCells} 
-                        gridCells={gridCells} 
-                        get_space_object_from_grid={get_space_object_from_grid}
-                        setResources={setResources}
-                        fetchUserResources={fetchUserResources}
-                    />
+                    <SpaceObjectMenu spaceObjectMenuData={spaceObjectMenuData}/>
                 </Modal>
             )}
         </div>

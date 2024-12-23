@@ -5,7 +5,7 @@ import { color } from "../styles/colors";
 function Login() {
     return (
         <>
-            <BackgroundColorChange color_to_set={color.dark_background_light} />
+            <BackgroundColorChange color_to_set={color.dark_background} />
             <Form route="/main/token/" method="login" />
         </>
     );

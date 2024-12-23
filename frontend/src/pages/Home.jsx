@@ -6,11 +6,9 @@ import Grid from "../components/Grid";
 import api from "../api";
 import { useState, useEffect } from "react";
 
-
 function Home() {
     const [userData, setUserData] = useState(null);
     const [selectedItem, setSelectedItem] = useState(null);
-    const [resources, setResources] = useState([]);
 
     const fetchCurrentUser = async () => {
         try {
@@ -19,17 +17,6 @@ function Home() {
         } catch (error) {
             console.error("Error fetching the current user:", error)
             throw error
-        }
-    };
-
-    const fetchUserResources = async () => {
-        try {
-            const response = await api.get("user_resources/");
-            console.log("User Resources Data:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching user resources:", error);
-            throw error;
         }
     };
 
@@ -42,6 +29,7 @@ function Home() {
                 console.error("Error fetching the current user:", error);
             }
         };
+
         fetchUserData();
     }, []);
 
@@ -49,8 +37,8 @@ function Home() {
         <>
             <BackgroundColorChange color_to_set={color.dark_background} />
             <div>
-                <Sidebar onSelectItem={setSelectedItem} resources={resources} setResources={setResources} fetchUserResources={fetchUserResources}/>
-                <Grid rows={9} columns={16} selectedItem={selectedItem} onSelectItem={setSelectedItem} setResources={setResources} fetchUserResources={fetchUserResources}/>
+                <Sidebar onSelectItem={setSelectedItem} />
+                <Grid rows={9} columns={16} selectedItem={selectedItem} onSelectItem={setSelectedItem}/>
             </div>
         </>
     );

@@ -14,16 +14,13 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
-class SpaceObjectPriceSerializer(serializers.ModelSerializer):
-    resource_name = serializers.SerializerMethodField()
 
+class SpaceObjectPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpaceObjectPrice
-        fields = ["id", "quantity", "resource_id", "resource_name", "spaceObject_id"]
-        read_only_fields = ["id", "quantity", "resource_id", "resource_name", "spaceObject_id"]
+        fields = ["id", "quantity", "resource_id", "spaceObject_id"]
+        read_only_fields = ["id", "quantity", "resource_id", "spaceObject_id"]
 
-    def get_resource_name(self, obj):
-        return obj.resource.name
 
 class SpaceObjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,26 +72,13 @@ class UpgradeSerializer(serializers.ModelSerializer):
         fields = ["id", "baseSpaceObject_id", "upgradedSpaceObject_id", "upgradeDescription"]
 
 class UpgradeCostSerializer(serializers.ModelSerializer):
-    resource_name = serializers.SerializerMethodField()
     upgrade_id = serializers.PrimaryKeyRelatedField(queryset=Upgrade.objects.all(), source='upgrade')
     resource_id = serializers.PrimaryKeyRelatedField(queryset=Resource.objects.all(), source='resource')
 
     class Meta:
         model = UpgradeCost
-        fields = ["id", "upgrade_id", "resource_id", "quantity", 'resource_name']
-    
-    def get_resource_name(self, obj):
-        resource = Resource.objects.get(id=obj.resource_id)
-        return resource.name
+        fields = ["id", "upgrade_id", "resource_id", "quantity"]
 
-
-# Can delete this probobly
-class ResourceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Resource
-        fields = ["id", "name", "description", "image_path"]
-        read_only_fields = ["id", "name", "description", "image_path"]
-        
 # class NoteSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Note

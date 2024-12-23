@@ -22,6 +22,5 @@
     justify-content: center;
 }
 
-img {
-    cursor: pointer;
+.grid-cell:hover {
 }
