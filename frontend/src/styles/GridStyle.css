@@ -22,5 +22,6 @@
     justify-content: center;
 }
 
-.grid-cell:hover {
+img {
+    cursor: pointer;
 }

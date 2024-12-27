@@ -5,12 +5,14 @@ import "../styles/StoreStyle.css";
 function Store({setResources}) {
     const [storeData, setStoreData] = useState(null);
     const [spaceObjectData, setSpaceObjectData] = useState(null);
+    const [storeInfo, setStoreInfo] = useState("");
 
     const fetchSpaceObjectPrices = async () => {
         try {
             const response = await api.get("space_object_prices/");
             const storeData = response.data;
             setStoreData(storeData);
+            console.log("Store data loaded:", storeData);
             return storeData;
         } catch (error) {
             console.error("Error loading the store:", error);
@@ -69,7 +71,7 @@ function Store({setResources}) {
 
     const groupedData = groupStoreDataBySpaceObject();
 
-    const handleDoubleClick = async (spaceObject_id, resources) => {
+    const handleClick = async (spaceObject_id, resources) => {
         console.log("Double clicked on space object:", spaceObject_id);
         try {
             console.log("Sending request to buy space object:", { spaceObject_id, resources });
@@ -80,27 +82,28 @@ function Store({setResources}) {
 
             const updated_resources = await api.get("user_resources/");
             setResources(updated_resources.data)
+            setStoreInfo("Added " + getSpaceObjectById(spaceObject_id).name + " to inventory!");
             console.log("User resources updated:", updated_resources.data);
-
             console.log("Space object bought:", response.data);
         } catch (error) {
+            setStoreInfo("Not enough resources!");
             console.error("Error buying space object:", error);
         }
     }
-
+    
     return (
-        <div>
-            <div>
+        <div className="main-container">
+            <div className='store-container'>
                 {groupedData.length > 0 ? (
                     <ul>
                         {groupedData.map((group, index) => (
-                            <li key={index}>
-                                <img className='svg' src={group.spaceObject.image_path} alt={group.spaceObject.name} onDoubleClick={() => handleDoubleClick(group.spaceObject.id, group.items.map(item => ({ type: item.resource_id, quantity: item.quantity })))}/>
+                            <li key={index} className="store-list" onClick={() => handleClick(group.spaceObject.id, group.items.map(item => ({ type: item.resource_id, quantity: item.quantity })))}>
+                                <img className='svg' src={group.spaceObject.image_path} alt={group.spaceObject.name}/>
                                 <p>{group.spaceObject.name}</p>
-                                <ul>
+                                <ul className='item-price'>
                                     {group.items.map((item, idx) => (
-                                        <li key={idx}>
-                                            Resource ID: {item.resource_id}, Quantity: {item.quantity}
+                                        <li key={idx} className='price-record'>
+                                            {item.resource_name}: {item.quantity}
                                         </li>
                                     ))}
                                 </ul>
@@ -110,6 +113,7 @@ function Store({setResources}) {
                 ) : (
                     <p>Loading...</p>
                 )}
+                <p className="store-footer">{storeInfo}</p>
             </div>
         </div>
     );

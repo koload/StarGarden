@@ -34,17 +34,6 @@ const fetchUserSpaceObjectsFromGrid = async (setUserGridSpaceObjects) => {
     }
 }
 
-const fetchUserResources = async () => {
-    try {
-        const response = await api.get("user_resources/");
-        console.log("User Resources Data:", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching user resources:", error);
-        throw error;
-    }
-};
-
 const fetchResourceNames = async (resourceIds) => {
     try {
         const response = await api.post("get_resources_by_id/", {
@@ -57,12 +46,11 @@ const fetchResourceNames = async (resourceIds) => {
     }
 };
 
-function Sidebar({ onSelectItem }) {
+function Sidebar({ onSelectItem, resources, setResources, fetchUserResources}) {
     const [isStoreWindowOpen, setIsStoreWindowOpen] = useState(false);
     const [isInventoryWindowOpen, setIsInventoryWindowOpen] = useState(false);
     const [isFriendsWindowOpen, setIsFriendsWindowOpen] = useState(false);
     const [isForgeWindowOpen, setIsForgeWindowOpen] = useState(false);
-    const [resources, setResources] = useState([]);
     const [resourceNames, setResourceNames] = useState([]);
     const [userGridSpaceObjects, setUserGridSpaceObjects] = useState([]);
 
@@ -137,14 +125,14 @@ function Sidebar({ onSelectItem }) {
             }
             callClaimResources();
         }
-    }, [userGridSpaceObjects]);
+    }, [userGridSpaceObjects, setResources]);
 
     return (
         <div className="sidebar">
             <div className="sidebar-resources">
                 <ul>
                     {resources.map((resource, index) => (
-                        <li>
+                        <li key={index}>
                             <p>{getResourceNameById(resource.resource_id)}: {resource.quantity}</p>
                         </li>
                         ))}

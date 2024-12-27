@@ -1,1 +1,65 @@
 @import "./colors.css";
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.upgrade-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #141414;
+    border: 1px solid var(--purple0_9);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--purple1);
+    max-width: 400px;
+    min-height: 230px;
+    margin: 20px auto;
+    margin-bottom: 10px;
+    color: var(--purple4);
+}
+
+.upgrade-container img {
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    cursor: default;
+}
+
+.upgrade-container p {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.upgrade-container ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.upgrade-container li {
+    background-color: black;
+    border: 1px solid var(--purple0_9);
+    box-shadow: 0 2px 4px var(--purple1);
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.upgrade-container li:hover {
+    background-color: var(--purple0_9);
+}
+
+.upgrade-container li p {
+    margin: 0;
+    text-align: center;
+    color: var(--purple4);
+}
