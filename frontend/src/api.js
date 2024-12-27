@@ -12,12 +12,11 @@ const api = axios.create({
 const refreshAccessToken = async () => {
     try {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-        const response = await axios.post(`${BASE_URL}/main/token/refresh/`, { refresh: refreshToken });
+        const response = await axios.post(${BASE_URL}/main/token/refresh/, { refresh: refreshToken });
         localStorage.setItem(ACCESS_TOKEN, response.data.access);
         return response.data.access;
     } catch (error) {
         console.error("Failed to refresh access token", error);
-        // Redirect to login page if refresh token fails
         const navigate = useNavigate();
         navigate("/login");
         return null;
@@ -28,9 +27,8 @@ const refreshAccessToken = async () => {
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem(ACCESS_TOKEN);
-        console.log(localStorage.getItem(ACCESS_TOKEN));
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = Bearer ${token};
         }
         return config;
     },
@@ -39,26 +37,25 @@ api.interceptors.request.use(
     }
 );
 
-
-
-export default api;
-
 // Adding a response interceptor to handle token expiration
-// api.interceptors.response.use(
-//     (response) => {
-//         return response;
-//     },
-//     async (error) => {
-//         const originalRequest = error.config;
-//         if (error.response.status === 401 && !originalRequest._retry) {
-//             originalRequest._retry = true;
-//             const newAccessToken = await refreshAccessToken();
-//             if (newAccessToken) {
-//                 axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
-//                 originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-//                 return api(originalRequest);
-//             }
-//         }
-//         return Promise.reject(error);
-//     }
-// );
+api.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async (error) => {
+        const originalRequest = error.config;
+        console.log("refreshing accesstoken")
+        if (error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            const newAccessToken = await refreshAccessToken();
+            if (newAccessToken) {
+                axios.defaults.headers.common['Authorization'] = Bearer ${newAccessToken};
+                originalRequest.headers['Authorization'] = Bearer ${newAccessToken};
+                console.log("token refreshed")
+                return api(originalRequest);
+            }
+        }
+        console.log("error while refreshing access token")
+        return Promise.reject(error);
+    }
+);
